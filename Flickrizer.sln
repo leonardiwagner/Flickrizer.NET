@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flickrizer", "Flickrizer\Flickrizer.csproj", "{86D8933D-DD29-4A93-A12C-95AA712CBAD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{042CC673-A216-47B8-BE2A-C6B9BD3D52C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example", "Example\Example.csproj", "{E7A233B3-E5FF-4150-90B8-F3438B8E836F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{86D8933D-DD29-4A93-A12C-95AA712CBAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86D8933D-DD29-4A93-A12C-95AA712CBAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86D8933D-DD29-4A93-A12C-95AA712CBAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86D8933D-DD29-4A93-A12C-95AA712CBAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{042CC673-A216-47B8-BE2A-C6B9BD3D52C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{042CC673-A216-47B8-BE2A-C6B9BD3D52C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{042CC673-A216-47B8-BE2A-C6B9BD3D52C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{042CC673-A216-47B8-BE2A-C6B9BD3D52C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7A233B3-E5FF-4150-90B8-F3438B8E836F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7A233B3-E5FF-4150-90B8-F3438B8E836F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7A233B3-E5FF-4150-90B8-F3438B8E836F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7A233B3-E5FF-4150-90B8-F3438B8E836F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
