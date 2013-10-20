@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Example
+namespace WebApplication1
 {
 
 
-    public partial class _Default
+    public partial class Example_Callback
     {
 
         /// <summary>

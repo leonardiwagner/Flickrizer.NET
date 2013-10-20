@@ -1,0 +1,14 @@
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\bin\WebApplication1.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\bin\WebApplication1.pdb
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\obj\Debug\WebExample.csprojResolveAssemblyReference.cache
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\obj\Debug\WebApplication1.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\obj\Debug\WebApplication1.pdb
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\bin\Flickrizer.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\WebApplication1\bin\Flickrizer.pdb
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\WebApplication1.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\WebApplication1.pdb
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\Flickrizer.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\Flickrizer.pdb
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\WebExample.csprojResolveAssemblyReference.cache
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\WebApplication1.dll
+C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\WebApplication1.pdb

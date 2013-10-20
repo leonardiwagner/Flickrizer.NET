@@ -1,5 +1,0 @@
-C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\Example.dll
-C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\bin\Example.pdb
-C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\Example.csprojResolveAssemblyReference.cache
-C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\Example.dll
-C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Example\obj\Debug\Example.pdb
