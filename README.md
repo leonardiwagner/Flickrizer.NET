@@ -1,7 +1,7 @@
-Flickstein.NET
+Flickstein.NET 
 ==============
 
-Flickr API using OAuth 1.0 for .NET
+Flickr API using OAuth 1.0 for .NET . Previously named as Flickrizer, changed due similarity of Twitterizer, which I have nothing related with this project or developers.
 
 Features
 ==============
