@@ -71,7 +71,7 @@ namespace Flickstein.Method
         /// <param name="page">Optional</param>
         /// <param name="perPage">Optional</param>
         /// <flickrApi>http://www.flickr.com/services/api/flickr.photosets.getList.html</flickrApi>
-        public Model.PhotosetsResponse GetList(String userId, int page, int perPage)
+        public Model.Photosets GetList(String userId, int page, int perPage)
         {
             var parameter = new Dictionary<String, String>();
 
@@ -86,7 +86,7 @@ namespace Flickstein.Method
                 parameter.Add("page", page.ToString());
             }
 
-            return oAuth.FlickrRequest<Model.PhotosetsResponse>("flickr.photosets.getList", parameter);
+            return oAuth.FlickrRequest<Model.PhotosetsResponse>("flickr.photosets.getList", parameter).photosets;
         }
 
         /// <summary>

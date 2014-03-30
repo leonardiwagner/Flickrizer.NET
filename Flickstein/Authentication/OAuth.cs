@@ -30,12 +30,10 @@ namespace Flickstein.Authentication
         {
             oAuthConsumerKey = consumerKey;
             oAuthConsumerSecret = consumerSecret;
-            
         }
 
         public String GetAccessUrl(String callback, OAuthPermission permission)
         {
-            GetSecretToken();
             return URL_AUTHORIZE_TOKEN + "?oauth_token=" + oAuthAccessToken + "&perms=write";
         }
 
@@ -67,7 +65,7 @@ namespace Flickstein.Authentication
             return response;
         }
 
-        private String GetSecretToken()
+        public String GetSecretToken()
         {
             string url = URL_REQUEST_TOKEN;
 

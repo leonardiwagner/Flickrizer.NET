@@ -11,7 +11,7 @@ namespace WebApplication1
             if (!String.IsNullOrEmpty(Request.QueryString["oauth_token"]) && !String.IsNullOrEmpty(Request.QueryString["oauth_verifier"]))
             {
                 Flickstein.Authentication.OAuth oAuth = new Flickstein.Authentication.OAuth(Session["consumerKey"].ToString(), Session["secretKey"].ToString());
-                String oAuthSecret = oAuth.OAuthGetAuthorizeToken(Request.QueryString["oauth_token"], (String)Session["secretToken"], Request.QueryString["oauth_verifier"]);
+                String oAuthSecret = oAuth.OAuthGetAuthorizeToken(Request.QueryString["oauth_token"], (String)Session["secretKey"], Request.QueryString["oauth_verifier"]);
             }
         }
     }

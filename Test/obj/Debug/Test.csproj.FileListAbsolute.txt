@@ -1,7 +1,0 @@
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\bin\Debug\Test.dll
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\bin\Debug\Test.pdb
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\bin\Debug\Flickstein.dll
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\bin\Debug\Flickstein.pdb
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\obj\Debug\Test.dll
-C:\Users\wagner\Documents\GitHub\Flickstein.NET\Test\obj\Debug\Test.pdb
