@@ -1,27 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Flickstein.Authentication;
 
-namespace Flickrizer.Method
+namespace Flickstein.Method
 {
-    public class Photos : Flickrizer.Method.Abstract.Method
+    public class Photos : Abstract.Method
     {
-        public Photos(Flickrizer.Authentication.OAuth oAuth) : base(oAuth) { }
+        public Photos(OAuth oAuth) : base(oAuth)
+        {
+        }
 
         public void Delete(String photoId)
         {
-
         }
 
         public void GetInfo(String photoId)
         {
-
         }
 
         public void GetSizes(String photoId)
         {
-
         }
     }
 }

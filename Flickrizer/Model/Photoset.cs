@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Flickrizer.Model
+namespace Flickstein.Model
 {
-    public class PhotosetsResponse : Flickrizer.Model.Abstract.Response
+    public class PhotosetsResponse : Response
     {
         public Photosets photosets { get; set; }
     }
@@ -43,7 +41,5 @@ namespace Flickrizer.Model
         public String date_update { get; set; }
 
         public Photo photo { get; set; }
-
     }
-
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using Flickstein.Authentication;
+using Flickstein.Method;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTest
@@ -16,15 +18,14 @@ namespace UnitTest
         [TestMethod]
         public void TestMethod1()
         {
+            var oAuth = new OAuth(FLICKR_API_KEY, FLICKR_API_KEY_SECRET);
 
-            Flickrizer.Authentication.OAuth oAuth = new Flickrizer.Authentication.OAuth(FLICKR_API_KEY, FLICKR_API_KEY_SECRET);
+            var FlicksteinPhotosets = new Photosets(oAuth);
 
-            Flickrizer.Method.Photosets flickrizerPhotosets = new Flickrizer.Method.Photosets(oAuth);
-            
-            Flickrizer.Model.PhotosetsResponse response = flickrizerPhotosets.GetList("48017770@N08", 0, 0);
-            
-            
-            //flickrizerPhotosets.GetPhoto("72157636741946983", 0, 0);
+            Flickstein.Model.PhotosetsResponse response = FlicksteinPhotosets.GetList("48017770@N08", 0, 0);
+
+
+            //FlicksteinPhotosets.GetPhoto("72157636741946983", 0, 0);
         }
     }
 }

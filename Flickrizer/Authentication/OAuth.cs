@@ -1,100 +1,106 @@
 ﻿using System;
-using System.Text;
-
 using System.Collections.Generic;
 using System.Collections.Specialized;
-
-using System.Net;
-
-
-using System.Web;
-
-
-
+using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Web;
+using System.Web.Script.Serialization;
 
-using System.Globalization; //oAuth timestamp #todo check if can be used without it
-
-namespace Flickrizer.Authentication
+namespace Flickstein.Authentication
 {
     public class OAuth
     {
-       
-        private readonly string URL_REQUEST_TOKEN = "http://www.flickr.com/services/oauth/request_token";
-        private readonly string URL_AUTHORIZE_TOKEN = "http://www.flickr.com/services/oauth/authorize";
         private readonly string URL_ACCESS_TOKEN = "http://www.flickr.com/services/oauth/access_token";
+        private readonly string URL_AUTHORIZE_TOKEN = "http://www.flickr.com/services/oauth/authorize";
+        private readonly string URL_REQUEST_TOKEN = "http://www.flickr.com/services/oauth/request_token";
         private readonly string URL_REST = "http://api.flickr.com/services/rest/";
         private readonly string URL_UPLOAD = "http://api.flickr.com/services/upload/";
 
-        private String oAuthConsumerKey = "";
-        private String oAuthConsumerSecret = "";
-        private String oAuthUrlCallBack = "";
+        private readonly String oAuthConsumerKey = "";
+        private readonly String oAuthConsumerSecret = "";
 
         private String oAuthAccessToken = "";
         private String oAuthAccessTokenSecret = "";
+        private String oAuthUrlCallBack = "";
 
         public OAuth(String consumerKey, String consumerSecret)
         {
-            this.oAuthConsumerKey = consumerKey;
-            this.oAuthConsumerSecret = consumerSecret;
+            oAuthConsumerKey = consumerKey;
+            oAuthConsumerSecret = consumerSecret;
+            
         }
 
-        private String GetOAuthNonce()
+        public String GetAccessUrl(String callback, OAuthPermission permission)
         {
-            return Convert.ToBase64String(new ASCIIEncoding().GetBytes(DateTime.Now.Ticks.ToString()));
+            GetSecretToken();
+            return URL_AUTHORIZE_TOKEN + "?oauth_token=" + oAuthAccessToken + "&perms=write";
         }
 
-        private String GetOAuthTimestamp()
+        public String OAuthGetAuthorizeToken(string token, string tokenSecret, string verifier)
         {
-            return Convert.ToInt64(((TimeSpan)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds).ToString(CultureInfo.CurrentCulture);
+            oAuthAccessToken = token;
+            oAuthAccessTokenSecret = tokenSecret;
+
+
+            Dictionary<string, string> parameters = GetOAuthBasicParameters();
+
+            parameters.Add("oauth_verifier", verifier);
+            parameters.Add("oauth_token", token);
+
+            string sig = OAuthCalculateSignature(URL_ACCESS_TOKEN, parameters);
+
+            parameters.Add("oauth_signature", sig);
+
+            string response = GetDataResponse(URL_ACCESS_TOKEN, parameters);
+
+            if (response.Length > 0)
+            {
+                NameValueCollection query = HttpUtility.ParseQueryString(response);
+
+
+                return query["oauth_token_secret"];
+            }
+
+            return response;
         }
 
-        public Dictionary<String, String> GetOAuthBasicParameters()
+        private String GetSecretToken()
         {
+            string url = URL_REQUEST_TOKEN;
 
-            Dictionary<string, string> parameters = new Dictionary<string, string>();
-            parameters.Add("oauth_nonce", this.GetOAuthNonce());
-            parameters.Add("oauth_timestamp", this.GetOAuthTimestamp());
-            parameters.Add("oauth_version", "1.0");
-            parameters.Add("oauth_signature_method", "HMAC-SHA1");
-            parameters.Add("oauth_consumer_key", this.oAuthConsumerKey);
+            Dictionary<string, string> parameters = GetOAuthBasicParameters();
 
-            return parameters;
+            parameters.Add("oauth_callback", oAuthUrlCallBack);
+
+            string sig = OAuthCalculateSignature(URL_REQUEST_TOKEN, parameters);
+
+            parameters.Add("oauth_signature", sig);
+
+            string response = GetDataResponse(url, parameters);
+
+            if (response.Length > 0)
+            {
+                NameValueCollection query = HttpUtility.ParseQueryString(response);
+
+                if (query["oauth_token"] != null)
+                    oAuthAccessToken = query["oauth_token"];
+
+                if (query["oauth_token_secret"] != null)
+                    oAuthAccessTokenSecret = query["oauth_token_secret"];
+            }
+
+            return oAuthAccessTokenSecret;
         }
 
         public T FlickrRequest<T>(String method, Dictionary<String, String> requestParameter)
         {
-            Dictionary<string, string> parameters = this.GetOAuthBasicParameters();
+            Dictionary<string, string> parameters = GetOAuthBasicParameters();
             parameters.Add("method", method);
 
-           foreach (KeyValuePair<string, string> pair in requestParameter)
-           {
-               parameters.Add(pair.Key,pair.Value);
-           }
-
-            parameters.Add("format", "json");
-            parameters.Add("nojsoncallback", "1");
-
-            parameters.Add("oauth_token", oAuthAccessToken);
-
-            string sig = OAuthCalculateSignature(URL_REST, parameters);
-
-            parameters.Add("oauth_signature", sig);
-
-            String response = this.getDataResponse(URL_REST, parameters);
-
-            System.Web.Script.Serialization.JavaScriptSerializer jsonDeserializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-
-            return jsonDeserializer.Deserialize<T>(response);
-           // dynamic photosetJsonId = (dynamic)JsonConvert.DeserializeObject<DynamicDictionary>(response);
-        }
-
-        public void FlickrSend(String method, Dictionary<String, String> requestParameter)
-        {
-            Dictionary<string, string> parameters = this.GetOAuthBasicParameters();
-            parameters.Add("method", method);
-
-            foreach (KeyValuePair<string, string> pair in requestParameter)
+            foreach (var pair in requestParameter)
             {
                 parameters.Add(pair.Key, pair.Value);
             }
@@ -108,22 +114,74 @@ namespace Flickrizer.Authentication
 
             parameters.Add("oauth_signature", sig);
 
-            String response = this.getDataResponse(URL_REST, parameters);
-            // dynamic photosetJsonId = (dynamic)JsonConvert.DeserializeObject<DynamicDictionary>(response);
+            String response = GetDataResponse(URL_REST, parameters);
+
+            var jsonDeserializer = new JavaScriptSerializer();
+
+            return jsonDeserializer.Deserialize<T>(response);
         }
 
+        public void FlickrSend(String method, Dictionary<String, String> requestParameter)
+        {
+            Dictionary<string, string> parameters = GetOAuthBasicParameters();
+            parameters.Add("method", method);
+
+            foreach (var pair in requestParameter)
+            {
+                parameters.Add(pair.Key, pair.Value);
+            }
+
+            parameters.Add("format", "json");
+            parameters.Add("nojsoncallback", "1");
+
+            parameters.Add("oauth_token", oAuthAccessToken);
+
+            string sig = OAuthCalculateSignature(URL_REST, parameters);
+
+            parameters.Add("oauth_signature", sig);
+
+            String response = GetDataResponse(URL_REST, parameters);
+        }
+
+        private String GetOAuthNonce()
+        {
+            return Convert.ToBase64String(new ASCIIEncoding().GetBytes(DateTime.Now.Ticks.ToString()));
+        }
+
+        private String GetOAuthTimestamp()
+        {
+            return
+                Convert.ToInt64((DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds)
+                    .ToString(CultureInfo.CurrentCulture);
+        }
+
+        private Dictionary<String, String> GetOAuthBasicParameters()
+        {
+            var parameters = new Dictionary<string, string>();
+            parameters.Add("oauth_nonce", GetOAuthNonce());
+            parameters.Add("oauth_timestamp", GetOAuthTimestamp());
+            parameters.Add("oauth_version", "1.0");
+            parameters.Add("oauth_signature_method", "HMAC-SHA1");
+            parameters.Add("oauth_consumer_key", oAuthConsumerKey);
+
+            return parameters;
+        }
+
+        
         private string OAuthCalculateSignature(String url, Dictionary<string, string> parameters)
         {
             string baseString = "";
-            string key = this.oAuthConsumerSecret + "&" + this.oAuthAccessTokenSecret;
-            byte[] keyBytes = System.Text.Encoding.UTF8.GetBytes(key);
+            string key = oAuthConsumerSecret + "&" + oAuthAccessTokenSecret;
+            byte[] keyBytes = Encoding.UTF8.GetBytes(key);
 
-            SortedList<string, string> sorted = new SortedList<string, string>();
-            foreach (KeyValuePair<string, string> pair in parameters) { sorted.Add(pair.Key, pair.Value); }
+            var sorted = new SortedList<string, string>();
+            foreach (var pair in parameters)
+            {
+                sorted.Add(pair.Key, pair.Value);
+            }
 
-
-            StringBuilder sb = new StringBuilder();
-            foreach (KeyValuePair<string, string> pair in sorted)
+            var sb = new StringBuilder();
+            foreach (var pair in sorted)
             {
                 sb.Append(pair.Key);
                 sb.Append("=");
@@ -135,165 +193,96 @@ namespace Flickrizer.Authentication
 
             baseString = "POST" + "&" + Uri.EscapeDataString(url) + "&" + Uri.EscapeDataString(sb.ToString());
 
+            var sha1 = new HMACSHA1(keyBytes);
 
-            System.Security.Cryptography.HMACSHA1 sha1 = new System.Security.Cryptography.HMACSHA1(keyBytes);
-
-            byte[] hashBytes = sha1.ComputeHash(System.Text.Encoding.UTF8.GetBytes(baseString));
+            byte[] hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(baseString));
 
             string hash = Convert.ToBase64String(hashBytes);
 
             return hash;
         }
 
-       public String GetAccessUrl(OAuthPermission permission)
-       {
-           
-           
-           return URL_AUTHORIZE_TOKEN + "?oauth_token=" + this.oAuthAccessToken + "&perms=write";
-       }
+        
 
-       public String GetSecretToken()
-       {
-           string url = URL_REQUEST_TOKEN;
+        private String GetDataResponse(string baseUrl, Dictionary<string, string> parameters)
+        {
+            // Calculate post data, content header and auth header
+            string data = OAuthCalculatePostData(parameters);
+            string authHeader = OAuthCalculateAuthHeader(parameters);
 
-           Dictionary<string, string> parameters = this.GetOAuthBasicParameters();
+            // Download data.
+            try
+            {
+                return DownloadData(baseUrl, data, "application/x-www-form-urlencoded", authHeader);
+            }
+            catch (WebException ex)
+            {
+                if (ex.Status != WebExceptionStatus.ProtocolError) throw;
 
-           parameters.Add("oauth_callback", this.oAuthUrlCallBack);
+                var response = ex.Response as HttpWebResponse;
+                if (response == null) throw;
 
-           string sig = OAuthCalculateSignature(URL_REQUEST_TOKEN, parameters);
+                if (response.StatusCode != HttpStatusCode.BadRequest &&
+                    response.StatusCode != HttpStatusCode.Unauthorized) throw;
 
-           parameters.Add("oauth_signature", sig);
+                using (var responseReader = new StreamReader(response.GetResponseStream()))
+                {
+                    string responseData = responseReader.ReadToEnd();
+                    responseReader.Close();
 
-           string response = this.getDataResponse(url, parameters);
+                    return responseData;
+                }
+            }
+        }
 
-           if (response.Length > 0)
-           {
-               NameValueCollection query = HttpUtility.ParseQueryString(response);
+        private static string DownloadData(string baseUrl, string data, string contentType, string authHeader)
+        {
+            var client = new WebClient();
+            client.Headers.Add("user-agent", "Flickstein.NET");
+            if (!String.IsNullOrEmpty(contentType)) client.Headers.Add("Content-Type", contentType);
+            if (!String.IsNullOrEmpty(authHeader)) client.Headers.Add("Authorization", authHeader);
 
-               if (query["oauth_token"] != null)
-                   this.oAuthAccessToken = query["oauth_token"];
+            return client.UploadString(baseUrl, data);
+        }
 
-               if (query["oauth_token_secret"] != null)
-                   this.oAuthAccessTokenSecret = query["oauth_token_secret"];
-           }
+        /// <summary>
+        ///     Returns the string for the Authorisation header to be used for OAuth authentication.
+        ///     Parameters other than OAuth ones are ignored.
+        /// </summary>
+        /// <param name="parameters">OAuth and other parameters.</param>
+        /// <returns></returns>
+        private string OAuthCalculateAuthHeader(Dictionary<string, string> parameters)
+        {
+            var sb = new StringBuilder("OAuth ");
+            foreach (var pair in parameters)
+            {
+                if (pair.Key.StartsWith("oauth"))
+                {
+                    sb.Append(pair.Key + "=\"" + Uri.EscapeDataString(pair.Value) + "\",");
+                }
+            }
 
-           return this.oAuthAccessTokenSecret;
-       }
+            return sb.Remove(sb.Length - 1, 1).ToString();
+        }
 
-       private String getDataResponse(string baseUrl, Dictionary<string, string> parameters)
-       {
-
-           // Calculate post data, content header and auth header
-           string data = OAuthCalculatePostData(parameters);
-           string authHeader = OAuthCalculateAuthHeader(parameters);
-
-           // Download data.
-           try
-           {
-
-               return DownloadData(baseUrl, data, "application/x-www-form-urlencoded", authHeader);
-           }
-           catch (WebException ex)
-           {
-               if (ex.Status != WebExceptionStatus.ProtocolError) throw;
-
-               HttpWebResponse response = ex.Response as HttpWebResponse;
-               if (response == null) throw;
-
-               if (response.StatusCode != HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Unauthorized) throw;
-
-               using (StreamReader responseReader = new StreamReader(response.GetResponseStream()))
-               {
-                   string responseData = responseReader.ReadToEnd();
-                   responseReader.Close();
-
-                   return responseData;
-               }
-           }
-       }
-
-       private static string DownloadData(string baseUrl, string data, string contentType, string authHeader)
-       {
-           WebClient client = new WebClient();
-           client.Headers.Add("user-agent", "Netbiis / Social Cast Alpha");
-           if (!String.IsNullOrEmpty(contentType)) client.Headers.Add("Content-Type", contentType);
-           if (!String.IsNullOrEmpty(authHeader)) client.Headers.Add("Authorization", authHeader);
-
-           return client.UploadString(baseUrl, data);
-       }
-
-       /// <summary>
-       /// Returns the string for the Authorisation header to be used for OAuth authentication.
-       /// Parameters other than OAuth ones are ignored.
-       /// </summary>
-       /// <param name="parameters">OAuth and other parameters.</param>
-       /// <returns></returns>
-       private string OAuthCalculateAuthHeader(Dictionary<string, string> parameters)
-       {
-           StringBuilder sb = new StringBuilder("OAuth ");
-           foreach (KeyValuePair<string, string> pair in parameters)
-           {
-               if (pair.Key.StartsWith("oauth"))
-               {
-                   sb.Append(pair.Key + "=\"" + Uri.EscapeDataString(pair.Value) + "\",");
-               }
-           }
-
-           return sb.Remove(sb.Length - 1, 1).ToString();
-       }
-
-       /// <summary>
-       /// Calculates for form encoded POST data to be included in the body of an OAuth call.
-       /// </summary>
-       /// <remarks>This will include all non-OAuth parameters. The OAuth parameter will be included in the Authentication header.</remarks>
-       /// <param name="parameters"></param>
-       /// <returns></returns>
-       private string OAuthCalculatePostData(Dictionary<string, string> parameters)
-       {
-           string data = String.Empty;
-           foreach (KeyValuePair<string, string> pair in parameters)
-           {
-               if (!pair.Key.StartsWith("oauth"))
-               {
-                   data += pair.Key + "=" + Uri.EscapeDataString(pair.Value) + "&";
-               }
-           }
-           return data;
-       }
-
-       public String OAuthGetAuthorizeToken(string token, string tokenSecret, string verifier)
-       {
-
-
-           this.oAuthAccessToken = token;
-           this.oAuthAccessTokenSecret = tokenSecret;
-
-
-           Dictionary<string, string> parameters = this.GetOAuthBasicParameters();
-
-           parameters.Add("oauth_verifier", verifier);
-           parameters.Add("oauth_token", token);
-
-           string sig = OAuthCalculateSignature(URL_ACCESS_TOKEN, parameters);
-
-           parameters.Add("oauth_signature", sig);
-
-           string response = this.getDataResponse(URL_ACCESS_TOKEN, parameters);
-
-           if (response.Length > 0)
-           {
-               NameValueCollection query = HttpUtility.ParseQueryString(response);
-
-
-               return query["oauth_token_secret"];
-                 
-           }
-
-
-
-
-           return response;
-       }
+        /// <summary>
+        ///     Calculates for form encoded POST data to be included in the body of an OAuth call.
+        /// </summary>
+        /// <remarks>This will include all non-OAuth parameters. The OAuth parameter will be included in the Authentication header.</remarks>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        private string OAuthCalculatePostData(Dictionary<string, string> parameters)
+        {
+            string data = String.Empty;
+            foreach (var pair in parameters)
+            {
+                if (!pair.Key.StartsWith("oauth"))
+                {
+                    data += pair.Key + "=" + Uri.EscapeDataString(pair.Value) + "&";
+                }
+            }
+            return data;
+        }
 
         /*
        //salva o token pra na hora q o flickr retornar saber de quem é o retorno!
@@ -463,6 +452,5 @@ namespace Flickrizer.Authentication
        }
 
        */
-
     }
 }

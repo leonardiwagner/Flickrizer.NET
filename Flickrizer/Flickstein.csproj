@@ -7,8 +7,8 @@
     <ProjectGuid>{86D8933D-DD29-4A93-A12C-95AA712CBAD0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Flickrizer</RootNamespace>
-    <AssemblyName>Flickrizer</AssemblyName>
+    <RootNamespace>Flickstein</RootNamespace>
+    <AssemblyName>Flickstein</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,7 +47,7 @@
     <Compile Include="Method\Photosets.cs" />
     <Compile Include="Authentication\OAuthPermission.cs" />
     <Compile Include="Authentication\OAuth.cs" />
-    <Compile Include="Model\Abstract\Response.cs" />
+    <Compile Include="Model\Response.cs" />
     <Compile Include="Model\Content.cs" />
     <Compile Include="Model\Photo.cs" />
     <Compile Include="Model\Photoset.cs" />

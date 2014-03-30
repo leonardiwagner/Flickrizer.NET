@@ -57,9 +57,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Flickrizer\Flickrizer.csproj">
+    <ProjectReference Include="..\Flickrizer\Flickstein.csproj">
       <Project>{86d8933d-dd29-4a93-a12c-95aa712cbad0}</Project>
-      <Name>Flickrizer</Name>
+      <Name>Flickstein</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

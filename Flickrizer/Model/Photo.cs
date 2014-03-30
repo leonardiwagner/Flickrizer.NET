@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Flickrizer.Model
+namespace Flickstein.Model
 {
-
-    public class Photo : Flickrizer.Model.Abstract.Response
+    public class Photo : Response
     {
         public String id { get; set; }
         public String secret { get; set; }
@@ -32,10 +28,5 @@ namespace Flickrizer.Model
     {
         public String type { get; set; }
         public Content _content { get; set; }
-
     }
-
-    
-
-    
 }

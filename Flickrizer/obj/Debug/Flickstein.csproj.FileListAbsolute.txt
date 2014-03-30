@@ -1,0 +1,5 @@
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\Flickrizer\obj\Debug\Flickstein.csprojResolveAssemblyReference.cache
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\Flickrizer\bin\Debug\Flickstein.dll
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\Flickrizer\bin\Debug\Flickstein.pdb
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\Flickrizer\obj\Debug\Flickstein.dll
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\Flickrizer\obj\Debug\Flickstein.pdb

@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Flickstein.Authentication;
 
-namespace Flickrizer.Method.Abstract
+namespace Flickstein.Method.Abstract
 {
     public abstract class Method
     {
-        protected Flickrizer.Authentication.OAuth oAuth = null;
+        protected OAuth oAuth = null;
 
-        public Method(Flickrizer.Authentication.OAuth oAuth)
+        public Method(OAuth oAuth)
         {
             this.oAuth = oAuth;
         }

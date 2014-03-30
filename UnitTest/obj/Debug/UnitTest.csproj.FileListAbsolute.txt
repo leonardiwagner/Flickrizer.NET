@@ -5,3 +5,10 @@ C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\UnitTest\bin\Debug\Fl
 C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\UnitTest\bin\Debug\Flickrizer.pdb
 C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\UnitTest\obj\Debug\UnitTest.dll
 C:\Users\wagner\Documents\GitHub\Flickrizer.NET\Flickrizer\UnitTest\obj\Debug\UnitTest.pdb
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\obj\Debug\UnitTest.csprojResolveAssemblyReference.cache
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\obj\Debug\UnitTest.dll
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\obj\Debug\UnitTest.pdb
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\bin\Debug\UnitTest.dll
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\bin\Debug\UnitTest.pdb
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\bin\Debug\Flickstein.dll
+C:\Users\wagner\Documents\GitHub\Flickstein.NET\UnitTest\bin\Debug\Flickstein.pdb
