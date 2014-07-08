@@ -1,7 +1,7 @@
 ![alt tag](https://raw.githubusercontent.com/leonardiwagner/Flickstein.NET/master/logo.jpg)
 =====
 
-Lightweight Flickr API for web only. Flickstein.NET was previoudsly named as Flickrizer.
+Lightweight Flickr API for web only. Flickstein.NET was previously named as Flickrizer.
 
 ### How to use?
 Install in your project with NuGet: https://www.nuget.org/packages/flickstein/
